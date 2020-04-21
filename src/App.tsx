@@ -94,15 +94,14 @@ class FormConductor extends React.Component<FormConductorProps> {
           let suggestedBooks = await this.apiAdapater.books.suggest();
           this.statusMachine(this.statuses.success as Status);
           let normalized = suggestedBooks.reduce(
-            (prev, next) => {
-              let idCount = 0;
-              prev.byId[idCount] = next;
-              prev.ids.push(idCount);
-              idCount++;
+            (prev, next, idx) => {
+              prev.byId[idx] = next;
+              prev.ids.push(idx);
               return prev;
             },
             { byId: {}, ids: [] as number[] }
           );
+          console.log(normalized);
           this.model.updateAll("suggestedBooks", normalized);
         }
 
@@ -159,7 +158,7 @@ let Form = ({
   handleOnSubmit: ReturnType<FormConductor["dispatch"]>;
 }) => (
   <React.Fragment>
-    <h1>Add a book:</h1>
+    <h4>Add a book:</h4>
     <form
       onSubmit={(e: React.FormEvent) => {
         e.preventDefault();
@@ -203,7 +202,7 @@ let BookList = ({
 }) =>
   books.length > 0 ? (
     <React.Fragment>
-      <h1>My Books</h1>
+      <h4>My Books</h4>
       <ul>
         {books.map(book => (
           <li key={book.title}>
@@ -213,10 +212,12 @@ let BookList = ({
       </ul>
 
       {suggestions.length && (
-        <div style={{ background: "pink" }}>
+        <React.Fragment>
           <p>
-            You're such a voracious reader. Here are some other titles we think
-            you'll love.
+            <strong>
+              You're such a voracious reader. Here are some other titles we
+              think you'll love.
+            </strong>
           </p>
           <ul>
             {suggestions.map(suggestion => (
@@ -225,12 +226,12 @@ let BookList = ({
               </li>
             ))}
           </ul>
-        </div>
+        </React.Fragment>
       )}
     </React.Fragment>
   ) : (
     <React.Fragment>
-      <h1>Book List</h1>
+      <h4>Book List</h4>
       <p>No books to display yet. Try adding some!</p>
     </React.Fragment>
   );
@@ -245,9 +246,11 @@ export default function App() {
         let suggestions = Object.values(
           model.findAll("suggestedBooks")
         ) as BookResource[];
+        console.log(suggestions);
 
         return (
           <React.Fragment>
+            <div className="u-pull-right">APP STATUS = {status}</div>
             <BookList books={books} suggestions={suggestions} />
             <hr />
             <Form handleOnSubmit={submitForm} />
