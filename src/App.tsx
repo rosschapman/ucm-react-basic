@@ -59,14 +59,17 @@ class FormConductor extends React.Component<FormConductorProps> {
           this.status === this.statuses.hasError
         ) {
           this.status = nextStatus;
+          break;
         }
       case this.statuses.hasData:
         if (this.status === this.statuses.success) {
           this.status = nextStatus;
+          break;
         }
       case this.statuses.success:
         if (this.status === this.statuses.waiting) {
           this.status = nextStatus;
+          break;
         }
       default:
         console.error("Logical fallacy achieved!");
