@@ -1,8 +1,10 @@
 {
-  "name": "ucm-react-basic",
+  "name": "user-interface-control-model-in-react",
   "version": "1.0.0",
-  "description": "",
-  "keywords": [],
+  "description": "Ian Horrocks inspired User Interface-Control-Model implemented in basic React",
+  "keywords": [
+    "react"
+  ],
   "main": "src/index.js",
   "dependencies": {
     "@types/react": "16.9.34",
