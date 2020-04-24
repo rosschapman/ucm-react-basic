@@ -22,14 +22,23 @@ export class BookCourier {
 
     return promiseFactory<BookResource[]>(nextData, () => {
       DB.books.push(nextData);
-      console.log("api:post:SUCCESS");
+      console.info("api:post:SUCCESS");
     });
   };
 
   fetchAll = () => {
+    let normalize = res =>
+      res.reduce(
+        (prev, next) => {
+          prev.byId[next.id] = next;
+          prev.ids.push(next.id);
+          return prev;
+        },
+        { byId: {}, ids: [] as number[] }
+      );
     return promiseFactory<BookResource[]>(DB.books, () => {
-      console.log("api:fetch:SUCCESS");
-    });
+      console.info("api:fetch:SUCCESS");
+    }).then(normalize);
   };
 
   // Sometimes a non-restful API is nice for a one-off!
@@ -38,9 +47,18 @@ export class BookCourier {
       { title: "Software Theory", author: "Frederica Frabetti" },
       { title: "Dreaming in Code", author: "Scott Rosenberg" }
     ];
+    let normalize = res =>
+      res.reduce(
+        (prev, next, idx) => {
+          prev.byId[idx] = next;
+          prev.ids.push(idx);
+          return prev;
+        },
+        { byId: {}, ids: [] as number[] }
+      );
 
     return promiseFactory<Book[]>(fakeResponse, () => {
-      console.log("api:suggest:resolved");
-    });
+      console.info("api:suggest:resolved");
+    }).then(normalize);
   };
 }
