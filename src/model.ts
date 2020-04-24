@@ -42,7 +42,7 @@ let findAll = (type: string) => {
 };
 
 let create = (initialData: InternalModel) => {
-  console.log("model:initialized");
+  console.info("model:initialized");
   internalModel = initialData;
 
   return {
